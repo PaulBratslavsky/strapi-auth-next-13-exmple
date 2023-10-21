@@ -1,7 +1,16 @@
 import { FormAction } from "@/app/types/types";
+import { toast } from "react-hot-toast";
+
+function renderMessage(message: string, type: string, params: FormAction) {
+  params.setMessage(message);
+  if (type === "success") toast.success(message);
+  if (type === "error") toast.error(message);
+  if (type === "loading") toast.loading(message);
+  if (type === "info") toast(message);
+  if (!type) toast(message);
+}
 
 export async function formAction(params: FormAction) {
-  params.setMessage("Logging in...");
   try {
     const response = await fetch(params.endpoint, {
       method: params.method,
@@ -11,10 +20,13 @@ export async function formAction(params: FormAction) {
     const data = await response.json();
     if (response.ok) {
       if (data.error) {
-        params.setMessage(data.error.message);
+        renderMessage(data.error.message, "error", params);
         return data;
-      } else return data;
-    } else params.setMessage(data.error.message);
+      } else {
+        renderMessage("Success!", "success", params);
+        return data;
+      }
+    } else renderMessage(data.error.message, "error", params);
   } catch (error) {
     console.error(error);
   }

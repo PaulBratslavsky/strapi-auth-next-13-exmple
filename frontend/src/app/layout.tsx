@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Toaster } from 'react-hot-toast';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -39,6 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <Toaster />
         <Header heading="Next Strapi Auth" navItems={navItems} />
         <main className="py-12 min-h-screen bg-slate-800">
           <div className="container mx-auto">{children}</div>

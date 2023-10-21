@@ -76,7 +76,6 @@ export default function RegisterForm() {
           />
 
           <SubmitButton loading={loading}>Register</SubmitButton>
-          <Message message={message} />
         </form>
       </div>
     </div>

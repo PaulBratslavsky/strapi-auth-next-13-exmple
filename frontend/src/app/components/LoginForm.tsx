@@ -65,7 +65,6 @@ export default function LoginForm() {
           />
 
           <SubmitButton loading={loading}>Login</SubmitButton>
-          <Message message={message} />
         </form>
       </div>
     </div>
