@@ -1,9 +1,12 @@
 "use client";
-import type { StrapiLogin } from "@/app/types/types";
-import { formAction } from "../lib/form-action";
 import { useState } from "react";
-import SubmitButton from "./SubmitButton";
+import { useRouter } from 'next/navigation'
+import type { StrapiAuthResponse, StrapiLogin } from "@/app/types/types";
+import { formAction } from "../lib/form-action";
 import Input from "./Input";
+import Message from "./Message";
+import SubmitButton from "./SubmitButton";
+import Loader from "./Loader";
 
 const INITIAL_STATE = {
   identifier: "",
@@ -11,9 +14,10 @@ const INITIAL_STATE = {
 };
 
 export default function LoginForm() {
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<StrapiLogin>(INITIAL_STATE);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<string>("");
 
   function handleChange(e: any) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,18 +25,20 @@ export default function LoginForm() {
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    console.dir(formData, { depth: null });
-
-    await formAction({
+    setLoading(true);
+    const response = (await formAction({
       formData,
       endpoint: "/api/auth/login",
       method: "POST",
-      setLoading,
       setMessage,
-    });
+    })) as StrapiAuthResponse;
 
+    if (response?.jwt) router.push("/dashboard");
     setFormData(INITIAL_STATE);
+    setLoading(false);
   }
+
+  if (loading) return <Loader />;
 
   return (
     <div className="h-auto flex items-center justify-center">
@@ -59,12 +65,7 @@ export default function LoginForm() {
           />
 
           <SubmitButton loading={loading}>Login</SubmitButton>
-          <p aria-live="polite" className="sr-only" role="status">
-            {message}
-          </p>
-          <p className="flex justify-center items-center text-purple-700 p-2">
-            {message}
-          </p>
+          <Message message={message} />
         </form>
       </div>
     </div>

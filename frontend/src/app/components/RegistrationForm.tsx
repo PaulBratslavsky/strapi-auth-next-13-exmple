@@ -1,8 +1,11 @@
 "use client";
-import type { StrapiRegister } from "@/app/types/types";
+import type { StrapiAuthResponse, StrapiRegister } from "@/app/types/types";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { formAction } from "../lib/form-action";
+import Loader from "./Loader";
 import Input from "./Input";
+import Message from "./Message";
 import SubmitButton from "./SubmitButton";
 
 const INITIAL_STATE = {
@@ -12,8 +15,9 @@ const INITIAL_STATE = {
 };
 
 export default function RegisterForm() {
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-const [formData, setFormData] = useState<StrapiRegister>(INITIAL_STATE);
+  const [formData, setFormData] = useState<StrapiRegister>(INITIAL_STATE);
   const [message, setMessage] = useState<string>("");
 
   function handleChange(e: any) {
@@ -22,18 +26,21 @@ const [formData, setFormData] = useState<StrapiRegister>(INITIAL_STATE);
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    console.dir(formData, { depth: null });
+    setLoading(true);
 
-    await formAction({
+    const response = (await formAction({
       formData,
       endpoint: "/api/auth/register",
       method: "POST",
-      setLoading,
       setMessage,
-    });
+    })) as StrapiAuthResponse;
 
+    if (response?.jwt) router.push("/dashboard");
     setFormData(INITIAL_STATE);
+    setLoading(false);
   }
+
+  if (loading) return <Loader />;
 
   return (
     <div className="h-auto flex items-center justify-center">
@@ -41,7 +48,7 @@ const [formData, setFormData] = useState<StrapiRegister>(INITIAL_STATE);
         <h2 className="text-gray-800  text-2xl font-bold mb-4">Register</h2>
 
         <form onSubmit={handleSubmit}>
-          <Input 
+          <Input
             type="username"
             name="username"
             label="username"
@@ -50,7 +57,7 @@ const [formData, setFormData] = useState<StrapiRegister>(INITIAL_STATE);
             onChange={handleChange}
           />
 
-          <Input 
+          <Input
             type="email"
             name="email"
             label="email"
@@ -59,7 +66,7 @@ const [formData, setFormData] = useState<StrapiRegister>(INITIAL_STATE);
             onChange={handleChange}
           />
 
-          <Input 
+          <Input
             type="password"
             name="password"
             label="password"
@@ -69,12 +76,7 @@ const [formData, setFormData] = useState<StrapiRegister>(INITIAL_STATE);
           />
 
           <SubmitButton loading={loading}>Register</SubmitButton>
-          <p aria-live="polite" className="sr-only" role="status">
-            {message}
-          </p>
-          <p className="flex justify-center items-center text-purple-700 p-2">
-            {message}
-          </p>
+          <Message message={message} />
         </form>
       </div>
     </div>

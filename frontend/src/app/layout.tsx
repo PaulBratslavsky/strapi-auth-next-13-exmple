@@ -10,8 +10,8 @@ const navItems = [
     exact: true,
   },
   {
-    label: "Profile",
-    href: "/profile",
+    label: "Dashboard",
+    href: "/dashboard",
     exact: false,
   },
   {
