@@ -1,8 +1,7 @@
-import { FormAction } from "@/app/types/types";
+import { FormAction, StrapiAuthResponse } from "@/app/types/types";
 import { toast } from "react-hot-toast";
 
-function renderMessage(message: string, type: string, params: FormAction) {
-  params.setMessage(message);
+function renderMessage(message: string, type: string) {
   if (type === "success") toast.success(message);
   if (type === "error") toast.error(message);
   if (type === "loading") toast.loading(message);
@@ -20,13 +19,13 @@ export async function formAction(params: FormAction) {
     const data = await response.json();
     if (response.ok) {
       if (data.error) {
-        renderMessage(data.error.message, "error", params);
+        renderMessage(data.error.message, "error");
         return data;
       } else {
-        renderMessage("Success!", "success", params);
-        return data;
+        renderMessage("Success!", "success");
+        return data as StrapiAuthResponse;
       }
-    } else renderMessage(data.error.message, "error", params);
+    } else renderMessage(data.error.message, "error");
   } catch (error) {
     console.error(error);
   }

@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation'
 import type { StrapiAuthResponse, StrapiLogin } from "@/app/types/types";
 import { formAction } from "../lib/form-action";
 import Input from "./Input";
-import Message from "./Message";
 import SubmitButton from "./SubmitButton";
 import Loader from "./Loader";
 
@@ -17,7 +16,6 @@ export default function LoginForm() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<StrapiLogin>(INITIAL_STATE);
-  const [message, setMessage] = useState<string>("");
 
   function handleChange(e: any) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,11 +28,9 @@ export default function LoginForm() {
       formData,
       endpoint: "/api/auth/login",
       method: "POST",
-      setMessage,
     })) as StrapiAuthResponse;
 
     if (response?.jwt) router.push("/dashboard");
-    setFormData(INITIAL_STATE);
     setLoading(false);
   }
 

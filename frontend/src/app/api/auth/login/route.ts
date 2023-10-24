@@ -24,7 +24,14 @@ export async function POST(request: NextRequest) {
   try {
     const response = await strapiLogin(data);
     if (response.error) return NextResponse.json({ error: response.error });
-    else return NextResponse.json(response);
+    else {
+      const newResponse = NextResponse.json(response);
+      newResponse.cookies.set("jwt", response.jwt, {
+        httpOnly: true,
+        path: "/",
+      });
+      return newResponse;
+    }
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   }

@@ -1,15 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-async function strapiMe() {
+async function strapiMe(authToken: string) {
   const url = `${process.env.STRAPI_URL}/api/users/me`;
-  const token = "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3Njk4MTE3LCJleHAiOjE3MDAyOTAxMTd9.nkBebZi4dIXsbKoDZPyzsymTmct1TOnfBO8FVn7weHg";
+  
   const body = {
     method: "GET",
     headers: {
-      "Content-Type": "application/json",
-      Authorization: token,
+      Authorization: authToken,
     },
   };
+
   try {
     const response = await fetch(url, body);
     return response.json();
@@ -18,9 +18,10 @@ async function strapiMe() {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authToken = request.headers.get("Authorization");
   try {
-    const response = await strapiMe();
+    const response = await strapiMe(authToken as string);
     if (response.error) return NextResponse.json({ error: response.error });
     else return NextResponse.json(response);
   } catch (error) {
