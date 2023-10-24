@@ -33,16 +33,14 @@ export default async function RootLayout({
 
   const authUser = await getAuthUser();
 
-
   return (
     <html lang="en">
       <body>
         <Toaster />
-        <AppProvider>
+        <AppProvider authUser={authUser}>
           <Header
             heading="Next Strapi Auth"
             navItems={navItems}
-            authUser={authUser}
           />
           <main className="py-12 min-h-screen bg-slate-800">
             <div className="container mx-auto">{children}</div>

@@ -6,13 +6,12 @@ import LoginLinks from "./LoginLinks";
 export default function Header({
   heading,
   navItems = [],
-  authUser,
 }: {
   heading: string;
   navItems: { label: string; href: string; exact: boolean }[];
-  authUser: any;
 }) {
   const pathname = usePathname();
+
   return (
     <header className=" py-4 bg-gray-900 text-gray-500 text-xl">
       <div className="container mx-auto flex justify-between">
@@ -31,7 +30,7 @@ export default function Header({
               {label}
             </NavLink>
           ))}
-          <LoginLinks user={authUser} />
+          <LoginLinks />
         </nav>
       </div>
     </header>

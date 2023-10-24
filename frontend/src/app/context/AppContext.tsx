@@ -19,8 +19,8 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+export const AppProvider: React.FC<{ children: React.ReactNode, authUser: any }> = ({ children, authUser }) => {
+  const [user, setUser] = useState<User | null>(authUser || null);
 
   return (
     <AppContext.Provider value={{ user, setUser }}>

@@ -10,7 +10,6 @@ export default async function ProtectedRoute({
   children: any;
 }) {
   const authUser = await getAuthUser();
-  console.log("authUser", authUser);
   if (authUser.error) redirect(path);
   return children;
 }

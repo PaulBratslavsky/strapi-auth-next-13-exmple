@@ -11,7 +11,7 @@ export default function Logout() {
     if (response.ok) {
       toast.success("You have been logged out");
       setUser(null)
-      router.push("/")
+      router.push("/login")
     }
   }
   return (

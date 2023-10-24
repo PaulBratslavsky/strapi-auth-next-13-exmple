@@ -18,7 +18,6 @@ export default function NavLink({
 }) {
   const active = "font-bold text-pink-300";
   const isActive = exact ? pathname === href : pathname.startsWith(href);
-  console.log("isActive", isActive);
   return (
     <Link href={href} className={isActive ? active : className}>
       {children}
