@@ -6,6 +6,7 @@ import { formAction } from "../lib/form-action";
 import Loader from "./Loader";
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
+import { useAppContext } from "@/app/context/AppContext";
 
 const INITIAL_STATE = {
   username: "",
@@ -17,6 +18,7 @@ export default function RegisterForm() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<StrapiRegister>(INITIAL_STATE);
+  const { setUser } = useAppContext();
 
   function handleChange(e: any) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -31,6 +33,9 @@ export default function RegisterForm() {
       endpoint: "/api/auth/register",
       method: "POST",
     })) as StrapiAuthResponse;
+
+    setUser(response.user || null) 
+
 
     if (response?.jwt) router.push("/dashboard");
     setLoading(false);

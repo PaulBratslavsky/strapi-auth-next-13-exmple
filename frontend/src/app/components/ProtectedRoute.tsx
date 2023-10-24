@@ -1,20 +1,30 @@
+"use server"
 import { redirect } from "next/navigation";
-import { cookies } from 'next/headers'
+import { getAuthUser } from "@/app/lib/get-auth-user";
 
-async function getAuthUser(token: string | undefined)  {
-  const response = await fetch("http://127.0.0.1:1337/api/users/me", {
-    headers: { Authorization: `Bearer ${token}`},
-  });
-  return  await response.json();
+export default async function ProtectedRoute({
+  path = "/",
+  children,
+}: {
+  path: string;
+  children: any;
+}) {
+  const authUser = await getAuthUser();
+  console.log("authUser", authUser);
+  if (authUser.error) redirect(path);
+  return children;
 }
 
+// "use client";
+// import { useAppContext } from "../context/AppContext";
+// import { useRouter } from 'next/navigation'
 
-export default async function ProtectedRoute({ component } : { component: any}) {
-  const cookeStore = cookies();
-  const token = cookeStore.get("jwt")?.value;
-
-  const Component = component;
-  const authUser = await getAuthUser(token);
-  if (authUser.error) redirect("/login");
-  return <Component authUser={authUser} />;
-}
+// export default async function ProtectedRoute({ path = "/", children } : { path: string, children : any}) {
+//   const { user } = useAppContext();
+//   const router = useRouter()
+//   if (!user) {
+//     router.push(path)
+//     return null
+//   };
+//   return children;
+// }

@@ -1,7 +1,6 @@
 import type { StrapiLogin } from "@/app/types/types";
 import { NextRequest, NextResponse } from "next/server";
 
-
 async function strapiLogin(data: StrapiLogin) {
   const url = `${process.env.STRAPI_URL}/api/auth/local`;
   const body = {

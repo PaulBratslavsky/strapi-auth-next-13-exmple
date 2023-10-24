@@ -1,24 +1,37 @@
 "use client";
 import NavLink from "./NavLink";
 import { usePathname } from "next/navigation";
+import LoginLinks from "./LoginLinks";
+
 export default function Header({
   heading,
   navItems = [],
+  authUser,
 }: {
-  heading: string
-  navItems: { label: string; href: string, exact: boolean }[];
+  heading: string;
+  navItems: { label: string; href: string; exact: boolean }[];
+  authUser: any;
 }) {
   const pathname = usePathname();
   return (
     <header className=" py-4 bg-gray-900 text-gray-500 text-xl">
       <div className="container mx-auto flex justify-between">
-        <span>{heading} - <span className="text-gray-300">{pathname}</span></span>
+        <span>
+          {heading} - <span className="text-gray-300">{pathname}</span>
+        </span>
         <nav className="flex justify-end gap-4">
           {navItems.map(({ label, href, exact }) => (
-            <NavLink className="hover:text-gray-300"  key={href} exact={exact} href={href} pathname={pathname}>
+            <NavLink
+              className="hover:text-gray-300"
+              key={href}
+              exact={exact}
+              href={href}
+              pathname={pathname}
+            >
               {label}
             </NavLink>
           ))}
+          <LoginLinks user={authUser} />
         </nav>
       </div>
     </header>

@@ -2,17 +2,17 @@ import React from "react";
 import Logout from "../components/Logout";
 import ProtectedRoute from "../components/ProtectedRoute";
 
-function DashboardPage() {
+function ProfilePage() {
   return (
     <div>
-      <h1>Dashboard</h1>
+      <h1>Profile Page</h1>
       <Logout />
     </div>
   );
 }
 
-export default function DashboardIndexRoute() {
-  return <ProtectedRoute path="/login">
-    <DashboardPage />
+export default function ProfileRoute() {
+  return <ProtectedRoute>
+    <ProfilePage />
   </ProtectedRoute>;
 }
